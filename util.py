@@ -23,7 +23,7 @@ import sklearn
 # from lazy_greedy import FacilityLocation, lazy_greedy, lazy_greedy_heap
 # from set_cover import SetCover
 
-from tensorflow.contrib.learn.python.learn.datasets.mnist import read_data_sets
+from tensorflow.keras.datasets.mnist import read_data_sets
 from tensorflow.examples.tutorials.mnist import input_data
 
 SEED = 100
@@ -64,7 +64,7 @@ def load_dataset(dataset, dataset_dir):
         path = os.path.join('grad_features.npy')
         X = np.load(path)  # shape [50000, 1000], type float16
     elif dataset == 'mnist':
-        mnist = input_data.read_data_sets('/tmp')
+        mnist = input_data.load_data('/tmp')
         X_train = np.vstack([mnist.train.images, mnist.validation.images])
         y_train = np.hstack([mnist.train.labels, mnist.validation.labels])
         X_test = mnist.test.images
