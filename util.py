@@ -23,7 +23,7 @@ import sklearn
 # from lazy_greedy import FacilityLocation, lazy_greedy, lazy_greedy_heap
 # from set_cover import SetCover
 
-from tensorflow.keras.datasets.mnist import read_data_sets
+from tensorflow.keras.datasets.mnist import load_data
 from tensorflow.examples.tutorials.mnist import input_data
 
 SEED = 100
