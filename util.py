@@ -24,7 +24,7 @@ import sklearn
 # from set_cover import SetCover
 
 from tensorflow.keras.datasets.mnist import load_data
-from tensorflow.examples.tutorials.mnist import input_data
+# from tensorflow.examples.tutorials.mnist import input_data
 
 SEED = 100
 EPS = 1E-8
@@ -64,7 +64,7 @@ def load_dataset(dataset, dataset_dir):
         path = os.path.join('grad_features.npy')
         X = np.load(path)  # shape [50000, 1000], type float16
     elif dataset == 'mnist':
-        mnist = input_data.load_data('/tmp')
+        mnist = load_data()
         X_train = np.vstack([mnist.train.images, mnist.validation.images])
         y_train = np.hstack([mnist.train.labels, mnist.validation.labels])
         X_test = mnist.test.images
