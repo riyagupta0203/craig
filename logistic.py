@@ -65,7 +65,9 @@ class LogisticRegression(object):
         d_y = label - p_y_given_x
         d_W = -np.dot(np.reshape(input, (1, -1)).T, np.reshape(d_y.T, (1, -1))) - l2_reg * self.W
         d_b = -np.mean(d_y, axis=0)
-        return d_W, d_b
+        d_W = np.array(d_W)
+        d_b = np.array(d_b)
+        return np.array([d_W, d_b])
        
 
 class Optimizer(object):
@@ -105,16 +107,8 @@ class Optimizer(object):
         for epoch in range(num_epochs):
             indices = self.order_elements(shuffle, n)
             for i in indices:
-                d_W, d_b = model.gradient(data[i], labels[i], l2_reg / n)
-                d_W = np.array(d_W)
-                d_b = np.array(d_b)
-                d_b = np.reshape(d_b, (1, -1))
-                grads = np.concatenate((d_W, d_b), axis=0)
-                print("Shape of model.params:", model.params.shape)
-                print("Shape of grads:", grads.shape)
-                print("Shape of weights[i]:", weights[i].shape)
-
-                model.params -= lr * grads * weights[i]
+                grads = model.gradient(data[i], labels[i], l2_reg / n) * weights[i]
+                model.params -= lr[epoch] * grads
             W[epoch] = model.params.copy()
             T[epoch] = (time.process_time() - start_epoch)
         return W, T
