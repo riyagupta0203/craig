@@ -418,7 +418,7 @@ def test(method='sgd', data='covtype', exp_decay=1, subset_size=1., greedy=1, sh
               f'subset: {subset_size}, subset size: {len(order)}, num_epochs: {num_epochs} -----------------')
         for gamma in g_range:
             for b in b_range:
-                dim = len(train_data[0])
+                dim = len(train_data.shape[1])
                 model = LogisticRegression(dim, num_class)
                 lr = gamma * np.power(b, np.arange(num_epochs)) if exp_decay else gamma / (1 + b * np.arange(num_epochs))
                 x_s, t_s = Optimizer().optimize(
