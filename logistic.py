@@ -65,6 +65,8 @@ class LogisticRegression(object):
         d_y = label - p_y_given_x
         d_W = -np.dot(np.reshape(input, (1, -1)).T, np.reshape(d_y.T, (1, -1))) - l2_reg * self.W
         d_b = -np.mean(d_y, axis=0)
+        d_W = d_W.flatten()
+        d_b = d_b.flatten()
         d_W = np.array(d_W)
         d_b = np.array(d_b)
         return np.array([d_W, d_b])
