@@ -108,7 +108,8 @@ class Optimizer(object):
                 d_W, d_b = model.gradient(data[i], labels[i], l2_reg / n)
                 d_W = np.array(d_W)
                 d_b = np.array(d_b)
-                grads = np.concatenate((d_W.ravel(), d_b))
+                d_b = np.reshape(d_b, (1, -1))
+                grads = np.concatenate((d_W, d_b), axis=0)
                 model.params -= lr * grads * weights[i]
             W[epoch] = model.params.copy()
             T[epoch] = (time.process_time() - start_epoch)
