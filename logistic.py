@@ -363,11 +363,9 @@ def test(method='sgd', data='covtype', exp_decay=1, subset_size=1., greedy=1, sh
     train_data, train_target, val_data, val_target, test_data, test_target = load_dataset(data)
     num_class = 1 if data in ['covtype', 'ijcnn1'] else 3
     train_data = train_data.to_numpy()
-    train_target = train_target.to_numpy()
+    
     val_data = val_data.to_numpy()
-    val_target = val_target.to_numpy()
     test_data = test_data.to_numpy()
-    test_target = test_target.to_numpy()
     if g_cnt != -1 and b_cnt != -1:
         g_range = [g_cnt]
         b_range = [b_cnt]
