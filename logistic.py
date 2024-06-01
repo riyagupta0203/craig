@@ -110,6 +110,10 @@ class Optimizer(object):
                 d_b = np.array(d_b)
                 d_b = np.reshape(d_b, (1, -1))
                 grads = np.concatenate((d_W, d_b), axis=0)
+                print("Shape of model.params:", model.params.shape)
+                print("Shape of grads:", grads.shape)
+                print("Shape of weights[i]:", weights[i].shape)
+
                 model.params -= lr * grads * weights[i]
             W[epoch] = model.params.copy()
             T[epoch] = (time.process_time() - start_epoch)
