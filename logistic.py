@@ -100,12 +100,16 @@ class Optimizer(object):
 
         time.sleep(.1)
         start_epoch = time.process_time()
-
+        
+        
         for epoch in range(num_epochs):
             indices = self.order_elements(shuffle, n)
             for i in indices:
-                grads = model.gradient(data[i], labels[i], l2_reg / n) * weights[i]
-                model.params -= lr[epoch] * grads
+                d_W, d_b = model.gradient(data[i], labels[i], l2_reg / n)
+                d_W = np.array(d_W)
+                d_b = np.array(d_b)
+                grads = np.concatenate((d_W.ravel(), d_b))
+                model.params -= lr * grads * weights[i]
             W[epoch] = model.params.copy()
             T[epoch] = (time.process_time() - start_epoch)
         return W, T
