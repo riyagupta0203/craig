@@ -13,7 +13,7 @@ np.seterr(all='ignore')
 import util
 import random
 
-pip install ucimlrepo
+# pip install ucimlrepo
 def sigmoid(x):
     return 1. / (1 + np.exp(-x))
 
