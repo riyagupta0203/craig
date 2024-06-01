@@ -13,7 +13,7 @@ np.seterr(all='ignore')
 import util
 import random
 
-# pip install ucimlrepo
+
 def sigmoid(x):
     return 1. / (1 + np.exp(-x))
 
@@ -30,15 +30,9 @@ class LogisticRegression(object):
     def __init__(self, dim, num_class):
         self.binary = num_class == 1
         self.W = np.zeros((dim, num_class))  # initialize W 0
-        # self.b = np.zeros(num_class)  # initialize bias 0
-        # self.params = np.array([self.W, self.b])
-        self.b = np.zeros((dim,))  # Reshape b to have the same number of rows as W
-        self.params = np.concatenate((self.W.flatten(), self.b))
-        self.params = np.array(self.params)
-        # self.W = np.zeros((dim, num_class))
-        # self.b = np.zeros(num_class)
-        # self.params = [self.W, self.b]
-    
+        self.b = np.zeros(num_class)  # initialize bias 0
+        self.params = np.array([self.W, self.b])
+
     def activation(self, input, params=None):
         W, b = params if params is not None else self.params
         if self.binary:
@@ -70,7 +64,7 @@ class LogisticRegression(object):
         d_W = -np.dot(np.reshape(input, (1, -1)).T, np.reshape(d_y.T, (1, -1))) - l2_reg * self.W
         d_b = -np.mean(d_y, axis=0)
         return np.array([d_W, d_b])
-       
+
 
 class Optimizer(object):
 
@@ -104,8 +98,7 @@ class Optimizer(object):
 
         time.sleep(.1)
         start_epoch = time.process_time()
-        
-        
+
         for epoch in range(num_epochs):
             indices = self.order_elements(shuffle, n)
             for i in indices:
@@ -174,17 +167,15 @@ def load_dataset(dataset, normalize=False):
         print(covertype.metadata) 
         # variable information 
         print(covertype.variables) 
-
+        X=X.to_numpy()
+        y=y.to_numpy()
         # X, y = util.load_dataset('covtype', DATASET_DIR)
         N = len(X)
-        import numpy as np
-        import pandas as pd
         NUM_TRAINING = N // 2  # Using integer division
         NUM_VALIDATION = NUM_TRAINING + N // 4
 
 # Ensure that the validation and test set do not overlap
         NUM_VALIDATION = min(NUM_VALIDATION, N)
-
         sample = np.arange(N)
         np.random.seed(0)
         np.random.shuffle(sample)
@@ -192,35 +183,9 @@ def load_dataset(dataset, normalize=False):
         train_sample = sample[:NUM_TRAINING]
         val_sample = sample[NUM_TRAINING:NUM_VALIDATION]
         test_sample = sample[NUM_VALIDATION:]
-        weights = np.ones(len(X), dtype=np.float64)
-# Assuming X and y are pandas DataFrames or Series
-        X_train = X.iloc[train_sample]
-        y_train = y.iloc[train_sample]
-        X_val = X.iloc[val_sample]
-        y_val = y.iloc[val_sample]
-        X_test = X.iloc[test_sample]
-        y_test = y.iloc[test_sample]
-  
-# In case X and y are NumPy arrays, convert them to DataFrames/Series first
-# X = pd.DataFrame(X)
-# y = pd.Series(y)
-
-        # NUM_TRAINING = N // 2  # Using integer division
-        # NUM_VALIDATION = NUM_TRAINING + N // 4
-
-        # # Ensure that the validation and test set do not overlap
-        # NUM_VALIDATION = min(NUM_VALIDATION, N)
-        # sample = np.arange(N)
-        # np.random.seed(0)
-        # np.random.shuffle(sample)
-
-        # train_sample = sample[:NUM_TRAINING]
-        # val_sample = sample[NUM_TRAINING:NUM_VALIDATION]
-        # test_sample = sample[NUM_VALIDATION:]
-
-        # X_train, y_train = X[train_sample, :], y[train_sample]
-        # X_val, y_val = X[val_sample, :], y[val_sample]
-        # X_test, y_test = X[test_sample, :], y[test_sample]
+        X_train, y_train = X[train_sample, :], y[train_sample]
+        X_val, y_val = X[val_sample, :], y[val_sample]
+        X_test, y_test = X[test_sample, :], y[test_sample]
         
         # NUM_TRAINING, NUM_VALIDATION = int(N / 2), int(N / 2) + int(N / 4)
         # # NUM_TRAINING, NUM_VALIDATION = int(N / 256), int(N / 256) + int(N / 512)
@@ -233,44 +198,6 @@ def load_dataset(dataset, normalize=False):
         # X_train, y_train = X[train_sample, :], y[train_sample]
         # X_val, y_val = X[val_sample, :], y[val_sample]
         # X_test, y_test = X[test_sample, :], y[test_sample]
-
-    elif dataset == 'ijcnn1':
-        print(f'Loading {dataset}')
-        X_train, y_train = util.load_dataset('ijcnn1.tr', DATASET_DIR)
-        X_test, y_test = util.load_dataset('ijcnn1.t', DATASET_DIR)
-        # X_train, y_train = X_train[:500], y_train[:500]
-        X_val, y_val = X_test, y_test
-
-    elif dataset == 'combined':
-        print(f'Loading {dataset}')
-        X_train, y_train = util.load_dataset('combined_scale', DATASET_DIR)
-        X_test, y_test = util.load_dataset('combined_scale.t', DATASET_DIR)
-        # X_train, y_train = X_train[1:200], y_train[1:200]
-        X_0, y_0 = X_train[y_train == 0], y_train[y_train == 0]
-        X_1, y_1 = X_train[y_train == 1], y_train[y_train == 1]
-        X_2, y_2 = X_train[y_train == 2], y_train[y_train == 2]
-
-        X_1, y_1 = X_1[:18266], y_1[:18266]
-        X_2, y_2 = X_2[:18266 * 2], y_2[:18266 * 2]
-        X_train, y_train = np.vstack([X_0, X_1, X_2]), np.hstack([y_0, y_1, y_2])
-
-        data_mean = np.vstack([X_train, X_test]).mean(axis=0)
-        X_train -= data_mean
-        X_test -= data_mean
-        X_val, y_val = X_test, y_test
-
-    if dataset in ['covtype', 'ijcnn1']:
-        y_train = np.reshape(y_train, (-1, 1))
-        y_val = np.reshape(y_val, (-1, 1))
-        y_test = np.reshape(y_test, (-1, 1))
-    elif dataset == 'combined':
-        num_class = 3
-        y_train = np.eye(num_class)[y_train]
-        y_val = np.eye(num_class)[y_val]
-        y_test = np.eye(num_class)[y_test]
-
-    print(f'Training size: {len(y_train)}, Test size: {len(y_test)}')
-    return X_train, y_train, X_val, y_val, X_test, y_test
 
 
 def get_param_range(subset_size, exp_decay, method, data):
@@ -367,10 +294,7 @@ def test(method='sgd', data='covtype', exp_decay=1, subset_size=1., greedy=1, sh
 
     train_data, train_target, val_data, val_target, test_data, test_target = load_dataset(data)
     num_class = 1 if data in ['covtype', 'ijcnn1'] else 3
-    train_data = train_data.to_numpy()
-    
-    val_data = val_data.to_numpy()
-    test_data = test_data.to_numpy()
+
     if g_cnt != -1 and b_cnt != -1:
         g_range = [g_cnt]
         b_range = [b_cnt]
@@ -422,13 +346,13 @@ def test(method='sgd', data='covtype', exp_decay=1, subset_size=1., greedy=1, sh
             order = np.arange(0, len(train_data))
             random.shuffle(order)
             order = order[:int(subset_size * len(train_data))]
-            weights = np.ones(len(train_data), dtype=float)
+            weights = np.ones(len(train_data), dtype=np.float)
 
         print(f'--------------- run number: {itr}, rand: {rand}, '
               f'subset: {subset_size}, subset size: {len(order)}, num_epochs: {num_epochs} -----------------')
         for gamma in g_range:
             for b in b_range:
-                dim = train_data.shape[1]
+                dim = len(train_data[0])
                 model = LogisticRegression(dim, num_class)
                 lr = gamma * np.power(b, np.arange(num_epochs)) if exp_decay else gamma / (1 + b * np.arange(num_epochs))
                 x_s, t_s = Optimizer().optimize(
