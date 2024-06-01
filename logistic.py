@@ -158,15 +158,15 @@ def load_dataset(dataset, normalize=False):
     if dataset == 'covtype':
         print(f'Loading {dataset}')
         from ucimlrepo import fetch_ucirepo 
- # fetch dataset 
-covertype = fetch_ucirepo(id=31) 
-# data (as pandas dataframes) 
-X = covertype.data.features 
-y = covertype.data.targets 
-# metadata 
-print(covertype.metadata) 
-# variable information 
-print(covertype.variables) 
+        # fetch dataset 
+        covertype = fetch_ucirepo(id=31) 
+        # data (as pandas dataframes) 
+        X = covertype.data.features 
+        y = covertype.data.targets 
+        # metadata 
+        print(covertype.metadata) 
+        # variable information 
+        print(covertype.variables) 
 
         # X, y = util.load_dataset('covtype', DATASET_DIR)
         N = len(X)
