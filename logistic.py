@@ -30,7 +30,7 @@ class LogisticRegression(object):
     def __init__(self, dim, num_class):
         self.binary = num_class == 1
         self.W = np.zeros((dim, num_class))  # initialize W 0
-        self.b = np.zeros(num_class,)  # initialize bias 0
+        self.b = np.zeros((1,num_class))  # initialize bias 0
         # self.params = np.array([self.W, self.b])
         self.params = np.concatenate((np.array(self.W), np.array(self.b)))
 
