@@ -182,10 +182,10 @@ def load_dataset(dataset, normalize=False):
         val_sample = sample[NUM_TRAINING:NUM_VALIDATION]
         test_sample = sample[NUM_VALIDATION:]
         print(f'no')
-        X_train, y_train = X[train_sample, :], y[train_sample]
-        X_val, y_val = X[val_sample, :], y[val_sample]
-        X_test, y_test = X[test_sample, :], y[test_sample]
-        
+        train_data, train_target = X[train_sample, :], y[train_sample]
+        val_data, val_target = X[val_sample, :], y[val_sample]
+        test_data, test_target = X[test_sample, :], y[test_sample]
+        print(f'yes')
         
 
 def get_param_range(subset_size, exp_decay, method, data):
