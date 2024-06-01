@@ -169,7 +169,7 @@ def load_dataset(dataset, normalize=False):
         # print(covertype.variables) 
         X=X.to_numpy()
         y=y.to_numpy()
-        print(f'no1')
+        
         # X, y = util.load_dataset('covtype', DATASET_DIR)
         N = len(X)
         NUM_TRAINING = N // 2  # Using integer division
@@ -181,12 +181,49 @@ def load_dataset(dataset, normalize=False):
         train_sample = sample[:NUM_TRAINING]
         val_sample = sample[NUM_TRAINING:NUM_VALIDATION]
         test_sample = sample[NUM_VALIDATION:]
-        print(f'no')
-        train_data, train_target = X[train_sample, :], y[train_sample]
-        val_data, val_target = X[val_sample, :], y[val_sample]
-        test_data, test_target = X[test_sample, :], y[test_sample]
-        print(f'yes')
         
+        X_train, y_train = X[train_sample, :], y[train_sample]
+        X_val, y_val  = X[val_sample, :], y[val_sample]
+        X_test, y_test= X[test_sample, :], y[test_sample]
+        
+    elif dataset == 'ijcnn1':
+        print(f'Loading {dataset}')
+        X_train, y_train = util.load_dataset('ijcnn1.tr', DATASET_DIR)
+        X_test, y_test = util.load_dataset('ijcnn1.t', DATASET_DIR)
+        # X_train, y_train = X_train[:500], y_train[:500]
+        X_val, y_val = X_test, y_test
+
+    elif dataset == 'combined':
+        print(f'Loading {dataset}')
+        X_train, y_train = util.load_dataset('combined_scale', DATASET_DIR)
+        X_test, y_test = util.load_dataset('combined_scale.t', DATASET_DIR)
+        # X_train, y_train = X_train[1:200], y_train[1:200]
+        X_0, y_0 = X_train[y_train == 0], y_train[y_train == 0]
+        X_1, y_1 = X_train[y_train == 1], y_train[y_train == 1]
+        X_2, y_2 = X_train[y_train == 2], y_train[y_train == 2]
+
+        X_1, y_1 = X_1[:18266], y_1[:18266]
+        X_2, y_2 = X_2[:18266 * 2], y_2[:18266 * 2]
+        X_train, y_train = np.vstack([X_0, X_1, X_2]), np.hstack([y_0, y_1, y_2])
+
+        data_mean = np.vstack([X_train, X_test]).mean(axis=0)
+        X_train -= data_mean
+        X_test -= data_mean
+        X_val, y_val = X_test, y_test
+
+    if dataset in ['covtype', 'ijcnn1']:
+        y_train = np.reshape(y_train, (-1, 1))
+        y_val = np.reshape(y_val, (-1, 1))
+        y_test = np.reshape(y_test, (-1, 1))
+    elif dataset == 'combined':
+        num_class = 3
+        y_train = np.eye(num_class)[y_train]
+        y_val = np.eye(num_class)[y_val]
+        y_test = np.eye(num_class)[y_test]
+
+    print(f'Training size: {len(y_train)}, Test size: {len(y_test)}')
+    return X_train, y_train, X_val, y_val, X_test, y_test
+
 
 def get_param_range(subset_size, exp_decay, method, data):
     g_range, b_range = [0], [0]
