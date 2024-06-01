@@ -13,7 +13,7 @@ np.seterr(all='ignore')
 import util
 import random
 
-
+pip install ucimlrepo
 def sigmoid(x):
     return 1. / (1 + np.exp(-x))
 
@@ -157,7 +157,18 @@ def load_dataset(dataset, normalize=False):
     DATASET_DIR = '/tmp/data/'
     if dataset == 'covtype':
         print(f'Loading {dataset}')
-        X, y = util.load_dataset('covtype', DATASET_DIR)
+        from ucimlrepo import fetch_ucirepo 
+ # fetch dataset 
+covertype = fetch_ucirepo(id=31) 
+# data (as pandas dataframes) 
+X = covertype.data.features 
+y = covertype.data.targets 
+# metadata 
+print(covertype.metadata) 
+# variable information 
+print(covertype.variables) 
+
+        # X, y = util.load_dataset('covtype', DATASET_DIR)
         N = len(X)
         NUM_TRAINING, NUM_VALIDATION = int(N / 2), int(N / 2) + int(N / 4)
         # NUM_TRAINING, NUM_VALIDATION = int(N / 256), int(N / 256) + int(N / 512)
