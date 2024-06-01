@@ -371,7 +371,7 @@ def test(method='sgd', data='covtype', exp_decay=1, subset_size=1., greedy=1, sh
             order = np.arange(0, len(train_data))
             random.shuffle(order)
             order = order[:int(subset_size * len(train_data))]
-            weights = np.ones(len(train_data), dtype=np.float)
+            weights = np.ones(len(train_data), dtype=float)
 
         print(f'--------------- run number: {itr}, rand: {rand}, '
               f'subset: {subset_size}, subset size: {len(order)}, num_epochs: {num_epochs} -----------------')
