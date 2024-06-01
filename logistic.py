@@ -65,8 +65,8 @@ class LogisticRegression(object):
         d_y = label - p_y_given_x
         d_W = -np.dot(np.reshape(input, (1, -1)).T, np.reshape(d_y.T, (1, -1))) - l2_reg * self.W
         d_b = -np.mean(d_y, axis=0)
-        return np.array([d_W, d_b])
-
+        return d_W, d_b
+       
 
 class Optimizer(object):
 
