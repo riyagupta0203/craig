@@ -29,12 +29,12 @@ def softmax(x):
 class LogisticRegression(object):
     def __init__(self, dim, num_class):
         self.binary = num_class == 1
-        # self.W = np.zeros((dim, num_class))  # initialize W 0
-        # self.b = np.zeros(num_class)  # initialize bias 0
-        # self.params = np.array([self.W, self.b])
-        self.W = np.zeros((dim, num_class))
-        self.b = np.zeros(num_class)
-        self.params = [self.W, self.b]
+        self.W = np.zeros((dim, num_class))  # initialize W 0
+        self.b = np.zeros(num_class)  # initialize bias 0
+        self.params = np.array([self.W, self.b])
+        # self.W = np.zeros((dim, num_class))
+        # self.b = np.zeros(num_class)
+        # self.params = [self.W, self.b]
     def activation(self, input, params=None):
         W, b = params if params is not None else self.params
         if self.binary:
@@ -65,10 +65,6 @@ class LogisticRegression(object):
         d_y = label - p_y_given_x
         d_W = -np.dot(np.reshape(input, (1, -1)).T, np.reshape(d_y.T, (1, -1))) - l2_reg * self.W
         d_b = -np.mean(d_y, axis=0)
-        d_W = d_W.flatten()
-        d_b = d_b.flatten()
-        d_W = np.array(d_W)
-        d_b = np.array(d_b)
         return np.array([d_W, d_b])
        
 
