@@ -34,7 +34,7 @@ class LogisticRegression(object):
         self.params = np.vstack([self.W, self.b])
 
     def activation(self, input, params=None):
-        W, b = params if params is not None else self.params
+        W, b, *_ = params if params is not None else self.params
         if self.binary:
             return sigmoid(np.dot(input, W) + b)
         else:
