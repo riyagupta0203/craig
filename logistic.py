@@ -170,7 +170,6 @@ def load_dataset(dataset, normalize=False):
 
         # X, y = util.load_dataset('covtype', DATASET_DIR)
         N = len(X)
-        y['Cover_Type'] = y['Cover_Type'] - 1
         import numpy as np
         import pandas as pd
         NUM_TRAINING = N // 2  # Using integer division
@@ -186,7 +185,7 @@ def load_dataset(dataset, normalize=False):
         train_sample = sample[:NUM_TRAINING]
         val_sample = sample[NUM_TRAINING:NUM_VALIDATION]
         test_sample = sample[NUM_VALIDATION:]
-
+        weights = np.ones(len(X_train), dtype=np.float64)
 # Assuming X and y are pandas DataFrames or Series
         X_train = X.iloc[train_sample]
         y_train = y.iloc[train_sample]
