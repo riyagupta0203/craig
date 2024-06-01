@@ -171,17 +171,34 @@ def load_dataset(dataset, normalize=False):
         # X, y = util.load_dataset('covtype', DATASET_DIR)
         N = len(X)
         y['Cover_Type'] = y['Cover_Type'] - 1
-        NUM_TRAINING, NUM_VALIDATION = int(N / 2), int(N / 2) + int(N / 4)
-        # NUM_TRAINING, NUM_VALIDATION = int(N / 256), int(N / 256) + int(N / 512)
+        NUM_TRAINING = N // 2  # Using integer division
+        NUM_VALIDATION = NUM_TRAINING + N // 4
+
+        # Ensure that the validation and test set do not overlap
+        NUM_VALIDATION = min(NUM_VALIDATION, N)
         sample = np.arange(N)
         np.random.seed(0)
         np.random.shuffle(sample)
-        train_sample, val_sample, test_sample = \
-            sample[:NUM_TRAINING], sample[NUM_TRAINING:NUM_VALIDATION], sample[NUM_VALIDATION:]
+
+        train_sample = sample[:NUM_TRAINING]
+        val_sample = sample[NUM_TRAINING:NUM_VALIDATION]
+        test_sample = sample[NUM_VALIDATION:]
 
         X_train, y_train = X[train_sample, :], y[train_sample]
         X_val, y_val = X[val_sample, :], y[val_sample]
         X_test, y_test = X[test_sample, :], y[test_sample]
+        
+        # NUM_TRAINING, NUM_VALIDATION = int(N / 2), int(N / 2) + int(N / 4)
+        # # NUM_TRAINING, NUM_VALIDATION = int(N / 256), int(N / 256) + int(N / 512)
+        # sample = np.arange(N)
+        # np.random.seed(0)
+        # np.random.shuffle(sample)
+        # train_sample, val_sample, test_sample = \
+        #     sample[:NUM_TRAINING], sample[NUM_TRAINING:NUM_VALIDATION], sample[NUM_VALIDATION:]
+
+        # X_train, y_train = X[train_sample, :], y[train_sample]
+        # X_val, y_val = X[val_sample, :], y[val_sample]
+        # X_test, y_test = X[test_sample, :], y[test_sample]
 
     elif dataset == 'ijcnn1':
         print(f'Loading {dataset}')
