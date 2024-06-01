@@ -170,7 +170,7 @@ def load_dataset(dataset, normalize=False):
 
         # X, y = util.load_dataset('covtype', DATASET_DIR)
         N = len(X)
-        X['Cover_Type'] = X['Cover_Type'] - 1
+        y['Cover_Type'] = y['Cover_Type'] - 1
         NUM_TRAINING, NUM_VALIDATION = int(N / 2), int(N / 2) + int(N / 4)
         # NUM_TRAINING, NUM_VALIDATION = int(N / 256), int(N / 256) + int(N / 512)
         sample = np.arange(N)
