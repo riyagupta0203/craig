@@ -30,11 +30,11 @@ class LogisticRegression(object):
     def __init__(self, dim, num_class):
         self.binary = num_class == 1
         self.W = np.zeros((dim, num_class))  # initialize W 0
-        self.b = np.zeros(num_class)  # initialize bias 0
+        self.b = np.zeros(num_class,)  # initialize bias 0
         self.params = np.vstack([self.W, self.b])
 
     def activation(self, input, params=None):
-        W, b, *_ = params if params is not None else self.params
+        W, b = params if params is not None else self.params
         if self.binary:
             return sigmoid(np.dot(input, W) + b)
         else:
