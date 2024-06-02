@@ -52,12 +52,13 @@ class LogisticRegression(object):
             return np.mean(np.argmax(self.predict(input, params), axis=1) == np.argmax(label, axis=1))
 
     def gradient(self, input, label, l2_reg=0.00, params=None):
-        W, b = params if params is not None else (self.W, self.b)
-        p_y_given_x = self.activation(input, (W, b))
-        d_y = label - p_y_given_x
-        d_W = -np.dot(input.T, d_y) - l2_reg * W
-        d_b = -np.mean(d_y, axis=0, keepdims=True)
-        return np.array([d_W, d_b])
+    W, b = params if params is not None else (self.W, self.b)
+    p_y_given_x = self.activation(input, (W, b))
+    d_y = label - p_y_given_x
+    d_W = -np.dot(input.T, d_y) - l2_reg * W
+    d_b = -np.mean(d_y, axis=0, keepdims=True)
+    return np.array([d_W, d_b])
+
 
 class Optimizer(object):
     @staticmethod
