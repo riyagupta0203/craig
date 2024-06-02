@@ -224,6 +224,8 @@ if __name__ == '__main__':
     parser.add_argument('--epoch', type=int, default=100, help='Number of epochs')
     parser.add_argument('--reg', type=float, default=0.0, help='L2 regularization term')
     parser.add_argument('--method', type=str, default='sgd', help='Optimization method')
+    parser.add_argument('-s', '--step', type=float, default=0.1, help='Step size for learning rate')
+    parser.add_argument('--greedy', type=int, default=0, help='Greedy optimization flag')
     args = parser.parse_args()
 
     X_train, y_train, X_val, y_val, X_test, y_test = load_dataset(args.dataset, normalize=True)
@@ -245,7 +247,7 @@ if __name__ == '__main__':
     optimizer = Optimizer()
 
     weights = np.ones(len(X_train))
-    step = 1e-1
+    step = args.step
     lr = [step / np.sqrt(i + 1) for i in range(args.epoch)]
     params = optimizer.optimize(args.method, model, X_train, y_train_one_hot, weights, args.epoch, args.shuffle, lr, args.reg)
     W, T = params
