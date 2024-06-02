@@ -57,7 +57,7 @@ class LogisticRegression(object):
         d_y = label - p_y_given_x
         d_W = -np.dot(input.T, d_y) - l2_reg * W
         d_b = -np.mean(d_y, axis=0, keepdims=True)
-        return np.array([d_W, d_b])
+        return np.concatenate([d_W.ravel(), d_b.ravel()])
 
 
 class Optimizer(object):
